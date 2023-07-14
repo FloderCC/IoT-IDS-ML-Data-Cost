@@ -1,15 +1,12 @@
 import os
-import random
 import numpy as np
 import pandas as pd
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.neural_network import MLPClassifier
-from sklearn.utils import shuffle
 
 from src.munitor import monitor_tic, monitor_toc
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KDTree
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import matthews_corrcoef
@@ -18,43 +15,41 @@ from sklearn.metrics import matthews_corrcoef
 global_random_seed = 42
 random_seeds_for_instance_sampling = [233, 377, 610]
 
-# format: [dataset, [to exclude columns], it has categorical features]
+# format: [dataset, [to exclude columns]]
 dataset_setup_list = [
     ["IoTID20", ["Flow_ID", "Cat", "Sub_Cat"]],
-    # ["BoTNeTIoT-L01", ["Device_Name", "Attack", "Attack_subType"]],
+    ["BoTNeTIoT-L01", ["Device_Name", "Attack", "Attack_subType"]],
     # ["X-IIoTID", ["Date", "Timestamp", "class1", "class2"]], #excluded for now
     ["IoT-DNL", []]
 ]
 
 classfiers = {
-    'RFR': RandomForestClassifier(),
-    'DTR': DecisionTreeClassifier(),
-    # 'ADB': AdaBoostClassifier(),
-    # 'LR': LogisticRegression(solver='lbfgs', max_iter=1000),
-    # 'MLP1': MLPClassifier(hidden_layer_sizes=(100,), max_iter=100, random_state=42),
-    # 'MLP2': MLPClassifier(hidden_layer_sizes=(200,), max_iter=100, random_state=42),
-    # 'MLP3': MLPClassifier(hidden_layer_sizes=(100, 100), max_iter=100, random_state=42),
+    'RF': RandomForestClassifier(),
+    'DT': DecisionTreeClassifier(),
+    'AdaBoost': AdaBoostClassifier(),
+    'LogReg': LogisticRegression(solver='lbfgs', max_iter=1000),
+    'MLP1': MLPClassifier(hidden_layer_sizes=(100,), max_iter=100, random_state=42),
+    'MLP2': MLPClassifier(hidden_layer_sizes=(200,), max_iter=100, random_state=42),
+    'MLP3': MLPClassifier(hidden_layer_sizes=(100, 100), max_iter=100, random_state=42),
 }
 
-# training_rows_sample_size_list = [
-#     0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0
-# ]
-
 training_rows_sample_size_list = [
-    0.1, 0.2
+    0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0
 ]
+
 # \\\ Setup end ///
 
-results = [
-    ['Dataset name', 'Dataset %', 'Training sample size', 'Random seed', 'Number of features', 'Classifier', 'MCC',
-     'Training time', 'TR-CPU%',
-     'Testing time', 'TE-CPU%']
-]
+results_header = ['Dataset name', 'Dataset %', 'Training sample size', 'Random seed', 'Number of features',
+                  'Classifier', 'MCC', 'Training time', 'TR-CPU%', 'Testing time', 'TE-CPU%']
+results = []
 
 results_df = None
 
+
 # dataset processing util method begin
 def run(dataset):
+    global results_df
+
     dataset_name = dataset[0]
 
     print(f"Started training with dataset {dataset_name}")
@@ -149,12 +144,12 @@ def run(dataset):
                 results.append([dataset_name] + r)
 
         # saving a backup of the results file
-        results_df = pd.DataFrame(results, index=None)
+        results_df = pd.DataFrame(results, index=None, columns=results_header)
 
         # Calculate means grouped by 'Seed'
-        avg_df = results_df\
-            .groupby(['Dataset name', 'Dataset %', 'Training sample size', 'Number of features', 'Classifier'])\
-            .agg({'MCC': 'mean', 'Training time': 'mean', 'TR-CPU%': 'mean', 'Testing time': 'mean', 'TE-CPU%': 'mean'})\
+        avg_df = results_df \
+            .groupby(['Dataset name', 'Dataset %', 'Training sample size', 'Number of features', 'Classifier']) \
+            .agg({'MCC': 'mean', 'Training time': 'mean', 'TR-CPU%': 'mean', 'Testing time': 'mean', 'TE-CPU%': 'mean'}) \
             .reset_index()
         avg_df['Random seed'] = 'AVG'
         # Append means rows to the original DataFrame
