@@ -117,7 +117,9 @@ def make_plot(dataset, classifier, metric):
 
     plt.savefig(f'plots/pdf/{output_file_name}.pdf')
 
-    plt.savefig(f'plots/png/{output_file_name}.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'plots/png/{output_file_name}.png', dpi=300)
+
+    readme_file.write(f'{classifier}\n')
     readme_file.write(f'![{classifier}](png/{quote(output_file_name)}.png)\n')
 
     plt.show()
@@ -137,7 +139,7 @@ for dataset in dataset_list:
 
 # adding the efficiency plot to the Readme file.
 readme_file.write(f'# Algorithm efficiency by dataset\n')
-readme_file.write(f'![Algorithm efficiency by dataset]("src/plots/png/{quote("plot algorithm efficiency")}.png")\n')
+readme_file.write(f'![Algorithm efficiency by dataset](png/{quote("plot algorithm efficiency")}.png)\n')
 
 # close the files
 ts_file.close()
