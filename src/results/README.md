@@ -1,5 +1,5 @@
 # All results
-## Top score summary.
+## Top score summary
 This table contains the maximum value (MAX) of MCC reached for each model-dataset pair. It also includes the values for which 98.5% (CP) of the MCC was reached.
 
 | Classifier   | Dataset       |   MAX MCC value |   MAX MCC sample size |   MAX MCC number of features |   MAX MCC energy consumed |   CP MCC value |   CP MCC sample size |   CP MCC number of features |   CP MCC energy consumed |

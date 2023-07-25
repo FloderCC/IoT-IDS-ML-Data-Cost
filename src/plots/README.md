@@ -1,4 +1,4 @@
-# Plots data size vs MCC and energy.
+# Plots data size vs MCC and energy
 ## Dataset IoTID20
 ### MCC
 RF

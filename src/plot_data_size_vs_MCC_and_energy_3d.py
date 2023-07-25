@@ -31,7 +31,7 @@ aux_constant = (simulated_busy_energy - simulated_idle_energy) / 100
 
 # create the Readme file
 readme_file = open(f'plots/README.md', 'w')
-readme_file.write('# Plots data size vs MCC and energy.\n')
+readme_file.write('# Plots data size vs MCC and energy\n')
 
 # create the csv writer
 ts_file = open(f'results/top scores summary.csv', 'w', newline='')

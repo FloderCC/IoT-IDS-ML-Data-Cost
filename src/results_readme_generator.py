@@ -13,7 +13,7 @@ def csv_to_markdown_table(csv_file_path):
 readme_file = open(f'results/README.md', 'w')
 readme_file.write('# All results\n')
 
-readme_file.write('## Top score summary.\n')
+readme_file.write('## Top score summary\n')
 readme_file.write('This table contains the maximum value (MAX) of MCC reached for each model-dataset pair. It also includes the values for which 98.5% (CP) of the MCC was reached.\n\n')
 readme_file.write(csv_to_markdown_table('results/top scores summary.csv')+'\n')
 
