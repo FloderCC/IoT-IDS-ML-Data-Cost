@@ -45,7 +45,7 @@ def get_coefficient(classifier, dataset, col1, col2):
     # return str(correlation) + ' (' + str(p_value) + ')'
 
 
-f = open('results/spearman_coefficients.csv', 'w', newline='')
+f = open('results/spearman coefficients.csv', 'w', newline='')
 writer = csv.writer(f)
 writer.writerow(['Classifier', 'Dataset', 'Instances VS energy SRCC', 'Features VS energy SRCC', 'Instances VS MCC SRCC', 'Features VS MCC SRCC', 'MCC VS energy SRCC'])
 

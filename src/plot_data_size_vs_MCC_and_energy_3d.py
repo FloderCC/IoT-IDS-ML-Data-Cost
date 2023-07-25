@@ -1,12 +1,14 @@
 """File description:
 
-Script for generating the 3d plots between instances and features vs MCC or energy.
+Script for generating the 3d plots between instances and features vs MCC or energy. This script also generate the top
+scores summary file, and the Readme file for the image folder
 
 Note that the variable 'real_mips' should represent the number of MIPS available on the computer where the experiment
 was executed.
 """
 
 import csv
+from urllib.parse import quote
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,11 +29,14 @@ simulated_idle_energy = 93.7
 simulated_busy_energy = 135
 aux_constant = (simulated_busy_energy - simulated_idle_energy) / 100
 
+# create the Readme file
+readme_file = open(f'plots/README.md', 'w')
+readme_file.write('# Plots data size vs MCC and energy.\n')
 
 # create the csv writer
-f = open(f'results/top scores summary.csv', 'w', newline='')
-writer = csv.writer(f)
-writer.writerow(['Classifier', 'Dataset', 'MAX MCC value', 'MAX MCC sample size', 'MAX MCC number of features', 'MAX MCC energy consumed', 'CP MCC value', 'CP MCC sample size', 'CP MCC number of features', 'CP MCC energy consumed'])
+ts_file = open(f'results/top scores summary.csv', 'w', newline='')
+ts_writer = csv.writer(ts_file)
+ts_writer.writerow(['Classifier', 'Dataset', 'MAX MCC value', 'MAX MCC sample size', 'MAX MCC number of features', 'MAX MCC energy consumed', 'CP MCC value', 'CP MCC sample size', 'CP MCC number of features', 'CP MCC energy consumed'])
 
 def make_plot(dataset, classifier, metric):
 
@@ -63,8 +68,6 @@ def make_plot(dataset, classifier, metric):
     # /// Stile 1 \\\
     # surf = ax.plot_trisurf(x, y, z, cmap=cm.jet, linewidth=0.1)
 
-
-
     # # /// Stile 2 \\\
     # Create a 2D grid from the 1D arrays x, y
     X, Y = np.meshgrid(np.linspace(min(x), max(x), 100), np.linspace(min(y), max(y), 100))
@@ -72,11 +75,6 @@ def make_plot(dataset, classifier, metric):
     Z = griddata((x, y), z, (X, Y), method='linear')
     # Use plot_surface with the 2D grid to create the 3D surface plot
     surf = ax.plot_surface(X, Y, Z, cmap=cm.jet, linewidth=0, antialiased=False)
-
-
-
-
-
 
     # Set labels and title
     ax.set_xlabel('Number of instances (%)')
@@ -108,14 +106,19 @@ def make_plot(dataset, classifier, metric):
 
     if metric == 'MCC':
         ax.set_zlabel('MCC', labelpad=14)
-        plt.savefig(f'plots/plot dataset {dataset}, {metric}, {classifier}.pdf')
-        writer.writerow(
+        output_file_name = f'plot dataset {dataset}, {metric}, {classifier}'
+        ts_writer.writerow(
             [classifier, dataset, round(max_mcc_z, 5), max_mcc_x, max_mcc_y, max_mcc_energy, round(threshold_z, 5),
              threshold_x, threshold_y, threshold_energy])
     else:
         ax.set_zlabel('Energy consumption (J)', labelpad=26)
         ax.zaxis.set_tick_params(pad=12)
-        plt.savefig(f'plots/plot dataset {dataset}, energy consumption, {classifier}.pdf')
+        output_file_name = f'plot dataset {dataset}, energy consumption, {classifier}'
+
+    plt.savefig(f'plots/pdf/{output_file_name}.pdf')
+
+    plt.savefig(f'plots/png/{output_file_name}.png', dpi=300, bbox_inches='tight')
+    readme_file.write(f'![{classifier}](src/plots/png/{quote(output_file_name)}.png)\n')
 
     plt.show()
 
@@ -124,10 +127,19 @@ classifier_list = ['RF', 'DT', 'AdaBoost', 'LogReg', 'Ridge']
 dataset_list = ["IoTID20", "BoTNeTIoT-L01", "IoT-DNL", "X-IIoTID"]
 metric_list = ['MCC', 'Energy consumption']
 
-for classifier in classifier_list:
-    for dataset in dataset_list:
-        for metric in metric_list:
+for dataset in dataset_list:
+    readme_file.write(f'## Dataset {dataset}\n')
+    for metric in metric_list:
+        readme_file.write(f'### {metric}\n')
+        for classifier in classifier_list:
             make_plot(dataset, classifier, metric)
 
-# close the file
-f.close()
+
+# adding the efficiency plot to the Readme file.
+readme_file.write(f'# Algorithm efficiency by dataset\n')
+readme_file.write(f'![Algorithm efficiency by dataset]("src/plots/png/{quote("plot algorithm efficiency")}.png")\n')
+
+# close the files
+ts_file.close()
+readme_file.close()
+
