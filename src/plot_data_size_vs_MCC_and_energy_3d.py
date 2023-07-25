@@ -118,7 +118,7 @@ def make_plot(dataset, classifier, metric):
     plt.savefig(f'plots/pdf/{output_file_name}.pdf')
 
     plt.savefig(f'plots/png/{output_file_name}.png', dpi=300, bbox_inches='tight')
-    readme_file.write(f'![{classifier}](src/plots/png/{quote(output_file_name)}.png)\n')
+    readme_file.write(f'![{classifier}](png/{quote(output_file_name)}.png)\n')
 
     plt.show()
 
