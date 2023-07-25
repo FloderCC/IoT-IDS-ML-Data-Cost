@@ -1,7 +1,7 @@
 # Plots data size vs MCC and energy.
 ## Dataset IoTID20
 ### MCC
-![RF](src/plots/png/plot%20dataset%20IoTID20%2C%20MCC%2C%20RF.png)
+![RF](png/plot%20dataset%20IoTID20%2C%20MCC%2C%20RF.png)
 ![DT](src/plots/png/plot%20dataset%20IoTID20%2C%20MCC%2C%20DT.png)
 ![AdaBoost](src/plots/png/plot%20dataset%20IoTID20%2C%20MCC%2C%20AdaBoost.png)
 ![LogReg](src/plots/png/plot%20dataset%20IoTID20%2C%20MCC%2C%20LogReg.png)
