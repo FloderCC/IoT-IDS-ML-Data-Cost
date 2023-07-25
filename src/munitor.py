@@ -1,3 +1,8 @@
+"""File description:
+
+Auxiliary file for measuring the execution time and CPU utilization.
+"""
+
 import os
 import threading
 import time
