@@ -55,10 +55,6 @@ def make_plot(dataset, classifier, metric):
 
     # plot configuration
 
-    x = df['Dataset %'].values
-    y = df['Number of features'].values
-    z = df[metric].values
-
     plt.rcParams['figure.figsize'] = [8.4, 6]
     plt.rcParams['font.size'] = 16
 
@@ -69,10 +65,14 @@ def make_plot(dataset, classifier, metric):
     heatmap = sns.heatmap(pivot_table, cmap='Blues' if metric == 'MCC' else 'RdYlGn_r', cbar_kws={'label': metric if metric == 'MCC' else metric+' (J)'})
 
     # Set labels and title
-    plt.ylabel('Number of instances (%)')
     plt.xlabel('Number of input features', labelpad=7)
+    plt.ylabel('Number of instances (%)')
 
     # Find the indices of the maximum MCC value
+    x = df['Dataset %'].values
+    y = df['Number of features'].values
+    z = df[metric].values
+
     max_mcc_index = np.argmax(z)
     # Retrieve the corresponding coordinates
     max_mcc_x = x[max_mcc_index]

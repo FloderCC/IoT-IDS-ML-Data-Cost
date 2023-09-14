@@ -77,8 +77,8 @@ def make_plot(dataset, classifier, metric):
     surf = ax.plot_surface(X, Y, Z, cmap=cm.jet, linewidth=0, antialiased=False)
 
     # Set labels and title
-    ax.set_ylabel('Number of instances (%)')
-    ax.set_xlabel('Number of input features', labelpad=7)
+    ax.set_xlabel('Number of instances (%)')
+    ax.set_ylabel('Number of input features', labelpad=7)
 
     # Find the indices of the maximum MCC value
     max_mcc_index = np.argmax(z)
