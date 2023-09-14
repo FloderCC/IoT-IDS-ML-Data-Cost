@@ -69,8 +69,8 @@ def make_plot(dataset, classifier, metric):
     heatmap = sns.heatmap(pivot_table, cmap='Blues' if metric == 'MCC' else 'RdYlGn_r', cbar_kws={'label': metric if metric == 'MCC' else metric+' (J)'})
 
     # Set labels and title
-    plt.xlabel('Number of instances (%)')
-    plt.ylabel('Number of input features', labelpad=7)
+    plt.ylabel('Number of instances (%)')
+    plt.xlabel('Number of input features', labelpad=7)
 
     # Find the indices of the maximum MCC value
     max_mcc_index = np.argmax(z)
