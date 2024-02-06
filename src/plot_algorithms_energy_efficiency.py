@@ -48,6 +48,6 @@ sns.barplot(data=df, x="Classifier", y="MCC / J", hue="Dataset name", hue_order=
 
 # Save the plot to a PDF file
 plt.savefig('plots/pdf/plot algorithm efficiency.pdf')
-plt.savefig('plots/png/plot algorithm efficiency.png', dpi=300, bbox_inches='tight')
+plt.savefig('plots/png/plot algorithm efficiency.png', dpi=300, bbox_inches='tight', transparent=True)
 plt.show()
 
